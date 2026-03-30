@@ -26,9 +26,9 @@ def a_star(grid, start, goal, counter=None):
             return
 
         for neighbor in current.neighbors:
-            a_star_score = current.g + getattr(neighbor, "weight", 1)  # tentative g-score
-            if a_star_score < getattr(neighbor, "g", float('inf')):
-                neighbor.g = a_star_score
+            tentative_g = current.g + getattr(neighbor, "weight", 1)  
+            if tentative_g < getattr(neighbor, "g", float('inf')):
+                neighbor.g = tentative_g
                 neighbor.h = heuristic(neighbor, goal)
                 neighbor.f = neighbor.g + neighbor.h
                 neighbor.parent = current
