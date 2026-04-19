@@ -13,10 +13,10 @@ from itertools import count  # needed for A* tie-breaker
 pygame.init()
 
 # Pygame setup 
-WIDTH = 600
+WIDTH = 1000
 ROWS = 20
 CELL_SIZE = WIDTH // ROWS
-INFO_HEIGHT = 200
+INFO_HEIGHT = 305
 WIN = pygame.display.set_mode((WIDTH, WIDTH + INFO_HEIGHT))
 pygame.display.set_caption("Pathfinding Visualizer")
 
@@ -59,7 +59,7 @@ def main(win):
         if running and not paused:
             elapsed_time = time.time() - start_time
 
-        draw_grid(win, grid, selected_algo, nodes_visited, path_len, path_cost,
+        draw_grid(win, grid,INFO_HEIGHT, selected_algo, nodes_visited, path_len, path_cost,
                   elapsed_time, speed, phase, a_star_info)
 
         for event in pygame.event.get():
