@@ -179,7 +179,7 @@ def main(win):
                     if end and end.parent:
                         algo_gen = reconstruct_path(
                             end,
-                            lambda: draw_grid(win, grid, selected_algo, nodes_visited, path_len, path_cost,
+                            lambda: draw_grid(win, grid,INFO_HEIGHT, selected_algo, nodes_visited, path_len, path_cost,
                                               elapsed_time, speed, "pathfinding", a_star_info)
                         )
                         phase = "pathfinding"
