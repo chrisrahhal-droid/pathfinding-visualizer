@@ -9,17 +9,17 @@ from algorithms.dijkstra import dijkstra
 from algorithms.a_star import a_star
 from algorithms.utils import reconstruct_path
 from itertools import count  # needed for A* tie-breaker
-
+ 
 pygame.init()
-
-# Pygame setup 
-WIDTH = 1000
+ 
+# Pygame setup
+WIDTH = 600
 ROWS = 20
 CELL_SIZE = WIDTH // ROWS
-INFO_HEIGHT = 305
+INFO_HEIGHT = 185
 WIN = pygame.display.set_mode((WIDTH, WIDTH + INFO_HEIGHT))
 pygame.display.set_caption("Pathfinding Visualizer")
-
+ 
 # Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -30,7 +30,7 @@ BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 PURPLE = (128, 0, 128)
 ORANGE = (255, 165, 0)
-
+ 
 # Main
 def main(win):
     grid = make_grid(ROWS, CELL_SIZE)
@@ -42,7 +42,7 @@ def main(win):
     selected_algo = "BFS"
     speed = 1
     phase = "idle"
-
+ 
     nodes_visited = 0
     path_len = 0
     path_cost = 0
@@ -51,22 +51,22 @@ def main(win):
     timer_started = False
     a_star_info = None
     counter = count()  # for A* tie-breaker
-
+ 
     clock = pygame.time.Clock()
     while True:
         clock.tick(60)
-
+ 
         if running and not paused:
             elapsed_time = time.time() - start_time
-
-        draw_grid(win, grid,INFO_HEIGHT, selected_algo, nodes_visited, path_len, path_cost,
+ 
+        draw_grid(win, grid, INFO_HEIGHT, selected_algo, nodes_visited, path_len, path_cost,
                   elapsed_time, speed, phase, a_star_info)
-
+ 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
+ 
             # Mouse input
             if pygame.mouse.get_pressed()[0]:
                 row, col = get_clicked_pos(pygame.mouse.get_pos(), CELL_SIZE, WIDTH)
@@ -80,7 +80,7 @@ def main(win):
                     end.make_end()
                 elif node != start and node != end:
                     node.make_wall()
-
+ 
             elif pygame.mouse.get_pressed()[2]:
                 row, col = get_clicked_pos(pygame.mouse.get_pos(), CELL_SIZE, WIDTH)
                 if row is None: continue
@@ -90,7 +90,7 @@ def main(win):
                 elif node == end:
                     end = None
                 node.reset()
-
+ 
             # Keyboard input
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and start and end and not running:
@@ -112,7 +112,7 @@ def main(win):
                         algo_gen = a_star(grid, start, end, counter)
                     elif selected_algo == "DFS":
                         algo_gen = dfs(grid, start, end)
-
+ 
                     running = True
                     paused = False
                     nodes_visited = 0
@@ -148,7 +148,7 @@ def main(win):
                     speed = min(speed+1, 10)
                 elif event.key == pygame.K_DOWN:
                     speed = max(speed-1, 1)
-
+ 
         # Animation
         if running and not paused and algo_gen:
             if not timer_started:
@@ -158,7 +158,7 @@ def main(win):
                 for _ in range(speed):
                     if phase == "searching":
                         action, node = next(algo_gen)
-
+ 
                         if action == "visit":
                             nodes_visited += 1
                         if selected_algo == "A*":
@@ -172,19 +172,19 @@ def main(win):
                                 node.make_visited()
                             else:
                                 node.make_frontier()
-                                
+                               
             except StopIteration:
                 if phase == "searching":
                     elapsed_time = time.time() - start_time  # Exact end time
                     if end and end.parent:
                         algo_gen = reconstruct_path(
                             end,
-                            lambda: draw_grid(win, grid,INFO_HEIGHT, selected_algo, nodes_visited, path_len, path_cost,
+                            lambda: draw_grid(win, grid, selected_algo, nodes_visited, path_len, path_cost,
                                               elapsed_time, speed, "pathfinding", a_star_info)
                         )
                         phase = "pathfinding"
                         running = False  # Stop timer here
-
+ 
                         path_len = 0
                         path_cost = 0
                         current = end
@@ -200,7 +200,7 @@ def main(win):
                         running = False
                         if end:
                             end.color = ORANGE
-
+ 
         # Pathfinding animation (separate from timer)
         if not running and algo_gen and phase == "pathfinding":
             try:
@@ -213,6 +213,6 @@ def main(win):
                         'h': getattr(end, 'h', float('inf')),
                         'f': getattr(end, 'f', float('inf'))
                     }
-
+ 
 if __name__ == "__main__":
     main(WIN)
