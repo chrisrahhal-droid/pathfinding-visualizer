@@ -12,7 +12,6 @@ PURPLE = (128, 0, 128)
 ORANGE = (255, 165, 0)
 GREY = (200, 200, 200)
 
-# Font for weight display
 WEIGHT_FONT = None
 
 def get_weight_font():
@@ -24,7 +23,6 @@ def get_weight_font():
 def get_weight_color(weight):
     if weight == 0 or weight == float('inf'):
         return WHITE if weight == 0 else BLACK
-    # Weight 1-10: light to dark gray
     shade = 255 - (weight - 1) * 25  
     return (shade, shade, shade)
 
@@ -51,16 +49,12 @@ class Node:
     def draw(self, win, selected_algo):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.size, self.size))
         
-        # Draw weight number for weighted algorithms, except walls
         if selected_algo in ["Dijkstra", "A*"] and self.state != "wall":
             weight_text = str(self.weight) if self.weight != float('inf') else '∞'
             font = get_weight_font()
             text_color = BLACK if self.state in ["empty", "start", "end"] else WHITE
-            # Converts a string (weight_text) into a Surface (an image in memory)
             text_surf = font.render(weight_text, True, text_color)  # True is for antialiasing
-            # Creates a Rect (bounding box) for positioning
             text_rect = text_surf.get_rect(center=(self.x + self.size // 2, self.y + self.size // 2))
-            # Copies (blit = block image transfer) the text surface onto the main window
             win.blit(text_surf, text_rect)
 
     def make_wall(self):
@@ -71,12 +65,12 @@ class Node:
     def make_start(self):
         self.color = GREEN
         self.state = "start"
-        self.weight = 0  # Start has 0 cost
+        self.weight = 0  
 
     def make_end(self):
         self.color = RED
         self.state = "end"
-        self.weight = 0  # End has 0 cost
+        self.weight = 0  
 
     def reset(self):
         self.color = WHITE
@@ -108,15 +102,12 @@ class Node:
     def update_neighbors(self, grid):
         self.neighbors = []
         rows = len(grid)
-        # Up
+        cols = len(grid[0])
         if self.row > 0 and not grid[self.row-1][self.col].is_wall():
             self.neighbors.append(grid[self.row-1][self.col])
-        # Down
         if self.row < rows - 1 and not grid[self.row+1][self.col].is_wall():
             self.neighbors.append(grid[self.row+1][self.col])
-        # Left
         if self.col > 0 and not grid[self.row][self.col-1].is_wall():
             self.neighbors.append(grid[self.row][self.col-1])
-        # Right
-        if self.col < rows - 1 and not grid[self.row][self.col+1].is_wall():
+        if self.col < cols - 1 and not grid[self.row][self.col+1].is_wall():
             self.neighbors.append(grid[self.row][self.col+1])
