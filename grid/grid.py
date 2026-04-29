@@ -22,7 +22,6 @@ def make_grid(rows, cols, cell_size):
     return grid
 
 def draw_grid(win, grid, selected_algo="", nodes_visited=0, path_len=0, path_cost=0, elapsed=0, speed=1, phase="idle", a_star_info=None):
-    FONT = pygame.font.SysFont('Arial', 18)
     WIDTH = win.get_width()
     win.fill(WHITE)
     for row in grid:
@@ -31,8 +30,6 @@ def draw_grid(win, grid, selected_algo="", nodes_visited=0, path_len=0, path_cos
             pygame.draw.rect(win, GREY, (node.x, node.y, node.size, node.size), 1)
 
     pygame.draw.rect(win, WHITE, (0, WIDTH, WIDTH, WIDTH))
-    pygame.display.update()
-
 def get_clicked_pos(pos, cell_size, width, height):
     x, y = pos
     if y < 0 or y >= height or x < 0 or x >= width:

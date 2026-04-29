@@ -74,10 +74,13 @@ class Node:
 
     def reset(self):
         self.color = WHITE
-        self.state = "empty"
-    
-    def generate_weight(self):
+        self.state = "empty"    
         self.weight = random.randint(1, 10)  # Reset to random weight
+    
+    def resetwithoutweight(self):
+        self.color = WHITE
+        self.state = "empty"
+        
 
     def is_wall(self):
         return self.state == "wall"
